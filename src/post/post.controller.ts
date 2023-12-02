@@ -1,3 +1,10 @@
+import {
+  JsonController,
+  Get,
+  Post,
+  QueryParam,
+  Param,
+} from "routing-controllers";
 import express from "express";
 import {
   createPost,
@@ -12,22 +19,39 @@ import cors from "cors";
 
 const app = express();
 app.use(cors());
-
 const postController = express.Router();
 
-postController.get("/", async (req, res) => {
-  const orderBy = req.query.order_by || "desc";
-  const search = req.query.search || null;
-  const posts = await listPosts(orderBy, search);
-  res.status(200).json(posts);
-});
+@JsonController("/posts")
+export class PostController {
+  @Get()
+  async getAll(
+    @QueryParam("order_by") orderBy: string = "desc",
+    @QueryParam("search") search: string | null = null
+  ) {
+    const posts = await listPosts(orderBy, search);
+    // res.status(200).json(posts);
+    return posts;
+  }
+  @Get("/:id")
+  async getById(@Param("id") postId: number) {
+    const post = await readPost(postId);
+    return post;
+  }
+}
+
+// postController.get("/", async (req, res) => {
+//   const orderBy = req.query.order_by || "desc";
+//   const search = req.query.search || null;
+//   const posts = await listPosts(orderBy, search);
+//   res.status(200).json(posts);
+// });
 
 //Read Post
-postController.get("/:id", async (req, res) => {
-  const postId = req.params.id;
-  const post = await readPost(postId);
-  res.status(200).json(post);
-});
+// postController.get("/:id", async (req, res) => {
+//   const postId = req.params.id;
+//   const post = await readPost(postId);
+//   res.status(200).json(post);
+// });
 
 //Create Post
 
