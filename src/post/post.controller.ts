@@ -60,10 +60,17 @@ postController.get("/:id/comments", async (req, res) => {
 
 //Adiciona comentários
 
+// postController.post("/:id/comments", async (req, res) => {
+//   const postId = req.params.id;
+//   const commentData = req.body;
+//   const comment = await createPostComment(postId, commentData);
+//   res.status(201).json(comment);
+// });
+
 postController.post("/:id/comments", async (req, res) => {
   const postId = req.params.id;
-  const commentData = req.body;
-  const comment = await createPostComment(postId, commentData);
+  const { userId, message } = req.body; // Desestruturação para obter userId e message do req.body
+  const comment = await createPostComment(postId, message, userId);
   res.status(201).json(comment);
 });
 
