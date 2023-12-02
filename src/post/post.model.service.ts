@@ -81,7 +81,7 @@ export async function createPost(data) {
       .promise()
       .query("SELECT * FROM posts WHERE id = ?", [lastInsertId]);
 
-    if (result.length === 1) {
+    if (Array.isArray(result) && result.length === 1) {
       return result[0];
     } else {
       return "Nenhum registro inserido, por favor verifique!";
@@ -100,7 +100,7 @@ export async function readPost(id) {
       [id]
     );
 
-    if (rows.length === 0) {
+    if (Array.isArray(rows) && rows.length === 0) {
       return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
     }
 
@@ -119,7 +119,7 @@ export async function updatePost(id, data) {
 
     const [result] = await connectionDataBase.promise().query(query, values);
 
-    if (result.affectedRows === 1) {
+    if ("affectedRows" in result && result.affectedRows === 1) {
       return "O post foi atualizado com sucesso!";
     } else {
       return "Erro ao atualizar o post!";
@@ -136,7 +136,7 @@ export async function deletePost(id) {
     const values = [id];
 
     const [result] = await connectionDataBase.promise().query(query, values);
-    if (result.affectedRows === 1) {
+    if ("affectedRows" in result && result.affectedRows === 1) {
       return "Registro excluído com sucesso!";
     } else {
       return "Nenhum registro excluído, verifique o ID.";
@@ -165,7 +165,7 @@ export async function listPostComments(id) {
 
     const [result] = await connectionDataBase.promise().query(query, values);
 
-    if (result.length > 0) {
+    if (Array.isArray(result) && result.length > 0) {
       return result;
     } else {
       return "Nenhum comentário encontrado para o post com o ID fornecido.";
@@ -213,7 +213,7 @@ export async function createPostComment(postId, message, userId) {
       .promise()
       .query("SELECT * FROM comments WHERE id = LAST_INSERT_ID()");
 
-    if (lastInsertResult.length === 1) {
+    if (Array.isArray(lastInsertResult) && lastInsertResult.length === 1) {
       return lastInsertResult[0];
     } else {
       return "Erro ao incluir os dados, por favor, verifique a query!";
