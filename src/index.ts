@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import express from "express";
 import postController from "./post/post.controller.mjs";
 import cors from "cors";
