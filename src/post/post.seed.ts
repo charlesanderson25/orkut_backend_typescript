@@ -7,8 +7,8 @@ import {
   listPosts,
   readPost,
   updatePost,
-} from "./post.model.service.mjs";
-import { listAllUsers } from "../user/user.model.service.mjs";
+} from "./post.model.service";
+import { listAllUsers } from "../user/user.model.service";
 
 const defaultLimit = 100;
 const minCommentCount = 3;

@@ -1,4 +1,4 @@
-import { connectionDataBase } from "../db.mjs";
+import { connectionDataBase } from "../db";
 
 // export async function createUser(data) {
 //   try {

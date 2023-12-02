@@ -1,8 +1,8 @@
 import fs from "fs";
-import * as jsonService from "../json/json.service.mjs";
+import * as jsonService from "../json/json.service";
 import cors from "cors";
 import express from "express";
-import { connectionDataBase } from "../db.mjs";
+import { connectionDataBase } from "../db";
 import { error } from "console";
 import { isAsyncFunction } from "util/types";
 

@@ -7,7 +7,7 @@ import {
   listPosts,
   readPost,
   updatePost,
-} from "./post.model.service.mjs";
+} from "./post.model.service";
 import cors from "cors";
 
 const app = express();

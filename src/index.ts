@@ -1,10 +1,10 @@
 import "reflect-metadata";
 
 import express from "express";
-import postController from "./post/post.controller.mjs";
+import postController from "./post/post.controller";
 import cors from "cors";
-import { connectionDataBase } from "./db.mjs";
-import userController from "./user/user.contoller.mjs";
+import { connectionDataBase } from "./db";
+import userController from "./user/user.contoller";
 
 const port = 8080;
 const host = "0.0.0.0";

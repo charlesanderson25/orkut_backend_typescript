@@ -1,4 +1,4 @@
-import { addFriend, listAllUsers } from "../user/user.model.service.mjs";
+import { addFriend, listAllUsers } from "../user/user.model.service";
 
 const minFriendsCount = 12;
 const friendsRange = 15;

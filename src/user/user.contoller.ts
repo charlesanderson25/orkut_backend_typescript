@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { listLatestFriends, readUser } from "./user.model.service.mjs";
+import { listLatestFriends, readUser } from "./user.model.service";
 
 const app = express();
 app.use(cors());
