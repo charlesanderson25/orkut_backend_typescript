@@ -59,7 +59,7 @@ export async function createUser(data) {
       .promise()
       .query("SELECT * FROM users WHERE id = ?", [lastInsertId]);
 
-    if (result.length === 1) {
+    if (Array.isArray(result) && result.length === 1) {
       return result[0];
     } else {
       return "Nenhum registro inserido, por favor verifique!";
@@ -78,7 +78,7 @@ export async function readUser(id) {
       [id]
     );
 
-    if (rows.length === 0) {
+    if (Array.isArray(rows) && rows.length === 0) {
       return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
     }
 
@@ -118,7 +118,7 @@ export async function addFriend(userA, userB) {
       .promise()
       .query("SELECT * FROM friends WHERE id = LAST_INSERT_ID()");
 
-    if (lastInsertResult.length === 1) {
+    if (Array.isArray(lastInsertResult) && lastInsertResult.length === 1) {
       return lastInsertResult[0];
     } else {
       return "Erro ao incluir os dados, por favor, verifique a query!";
