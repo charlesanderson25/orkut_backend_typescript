@@ -1,15 +1,20 @@
 import "reflect-metadata";
 
 import express from "express";
-import postController from "./post/post.controller";
+import postController, { PostController } from "./post/post.controller";
 import cors from "cors";
 import { connectionDataBase } from "./db";
 import userController from "./user/user.contoller";
+import { createExpressServer } from "routing-controllers";
 
 const port = 8080;
 const host = "0.0.0.0";
-const app = express();
-app.use(express.json()); //Middleware para trabalhar com JSON
+// const app = express();
+// app.use(express.json()); //Middleware para trabalhar com JSON
+const app = createExpressServer({
+  cors: true,
+  controllers: [PostController],
+});
 
 app.use(
   cors({
@@ -18,7 +23,7 @@ app.use(
   })
 );
 
-app.use("/posts", postController);
+// app.use("/posts", postController);
 app.use("/users", userController);
 
 app.listen(port, host, () => {
