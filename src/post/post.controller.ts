@@ -30,7 +30,8 @@ export class PostController {
   @Get()
   async getAll(
     @QueryParam("order_by") orderBy: string = "desc",
-    @QueryParam("search") search: string | null = null
+    // @QueryParam("search") search: string | null = null
+    @QueryParam("search") search: string
   ) {
     const posts = await listPosts(orderBy, search);
     // res.status(200).json(posts);
