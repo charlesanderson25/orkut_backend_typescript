@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { listLatestFriends, readUser } from "./user.model.service";
+import { listLatestFriends, readUser } from "./user.model.repository";
 import { JsonController, Get, Param } from "routing-controllers";
 
 const app = express();
