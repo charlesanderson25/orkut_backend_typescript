@@ -7,7 +7,7 @@ import {
   listPosts,
   readPost,
   updatePost,
-} from "./post.model.service";
+} from "./post.model.repository";
 import { listAllUsers } from "../user/user.model.repository";
 
 const defaultLimit = 100;
