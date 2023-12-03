@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { createUser } from "./user.model.service";
+import { createUser } from "./user.model.repository";
 
 const defaultLimit = 100;
 
