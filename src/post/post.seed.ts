@@ -8,7 +8,7 @@ import {
   readPost,
   updatePost,
 } from "./post.model.service";
-import { listAllUsers } from "../user/user.model.service";
+import { listAllUsers } from "../user/user.model.repository";
 
 const defaultLimit = 100;
 const minCommentCount = 3;
