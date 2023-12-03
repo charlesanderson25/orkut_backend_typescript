@@ -4,7 +4,7 @@ import express from "express";
 import postController, { PostController } from "./post/post.controller";
 import cors from "cors";
 import { connectionDataBase } from "./db";
-import userController from "./user/user.contoller";
+import userController, { UserController } from "./user/user.contoller";
 import { createExpressServer } from "routing-controllers";
 
 const port = 8080;
@@ -13,7 +13,7 @@ const host = "0.0.0.0";
 // app.use(express.json()); //Middleware para trabalhar com JSON
 const app = createExpressServer({
   cors: true,
-  controllers: [PostController],
+  controllers: [PostController, UserController],
 });
 
 app.use(
