@@ -18,8 +18,9 @@ import {
   listPosts,
   readPost,
   updatePost,
-} from "./post.model.service";
+} from "./post.model.repository";
 import cors from "cors";
+import { PostRepository } from "./post.model.repository";
 
 const app = express();
 app.use(cors());
@@ -27,19 +28,25 @@ const postController = express.Router();
 
 @JsonController("/posts")
 export class PostController {
+  constructor() {
+    this.postRepository = new PostRepository();
+  }
+
+  postRepository: PostRepository;
+
   @Get()
   async getAll(
     @QueryParam("order_by") orderBy: string = "desc",
     // @QueryParam("search") search: string | null = null
     @QueryParam("search") search: string
   ) {
-    const posts = await listPosts(orderBy, search);
+    const posts = await this.postRepository.listPosts(orderBy, search);
     // res.status(200).json(posts);
     return posts;
   }
   @Get("/:id")
   async getById(@Param("id") postId: number) {
-    const post = await readPost(postId);
+    const post = await this.postRepository.readPost(postId);
     return post;
   }
 
@@ -47,25 +54,25 @@ export class PostController {
   @Post()
   async createPost(@Body() body: any) {
     // const postData = req.body;
-    const post = await createPost(body);
+    const post = await this.postRepository.createPost(body);
     return post;
   }
 
   @Delete("/:id")
   async deleteById(@Param("id") postId: number) {
-    const post = await deletePost(postId);
+    const post = await this.postRepository.deletePost(postId);
     return post;
   }
 
   @Put("/:id")
   async updateById(@Param("id") postId: number, @Body() body: any) {
-    const post = await updatePost(postId, body);
+    const post = await this.postRepository.updatePost(postId, body);
     return post;
   }
 
   @Get("/:id/comments")
   async listPostComments(@Param("id") postId: number) {
-    const comments = await listPostComments(postId);
+    const comments = await this.postRepository.listPostComments(postId);
     return comments;
   }
 
@@ -73,7 +80,11 @@ export class PostController {
   @Post("/:id/comments")
   async createPostComment(@Param("id") postId: number, @Body() body: any) {
     const { userId, message } = body; // Desestruturação para obter userId e message do req.body
-    const comment = await createPostComment(postId, message, userId);
+    const comment = await this.postRepository.createPostComment(
+      postId,
+      message,
+      userId
+    );
     return comment;
   }
 }
