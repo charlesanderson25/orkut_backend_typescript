@@ -82,11 +82,18 @@ export class UserRepository {
     //   console.error("Erro na consulta", error);
     //   throw error;
     // }
-    const user = await prisma.users.create({ data });
+    const user = await prisma.users.create({
+      data: {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        pass_word: data.pass_word,
+        avatar: data.avatar,
+      },
+    });
     return user;
   }
 
-  async readUser(id: number) {
+  async readUser(userId: number) {
     // try {
     //   const [rows] = await connectionDataBase.promise().query(
     //     /*SQL*/
@@ -104,9 +111,9 @@ export class UserRepository {
     //   console.error("Erro na consulta:", error);
     //   throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
     // }
-    const user = await prisma.users.findFirst({
+    const user = await prisma.users.findUnique({
       where: {
-        id,
+        id: userId,
       },
     });
     return user;
@@ -180,7 +187,7 @@ export class UserRepository {
     //   console.error("Erro na consulta", error);
     //   throw error;
     // }
-    const friend = await prisma.users.create({
+    const friend = await prisma.friends.create({
       data: {
         user_a,
         user_b,
