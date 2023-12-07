@@ -1,5 +1,8 @@
+// import { prisma } from "./../prisma";
 import { connectionDataBase } from "../db";
-import { prisma } from "../prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 // export class UserRepository {
 //   async createUser(data: any) {
@@ -196,27 +199,53 @@ export class UserRepository {
     return friend;
   }
 
+  // async listLatestFriends(userId: number) {
+  //   try {
+  //     const query = await prisma.$queryRaw/*SQL*/ `
+  //       SELECT u.*
+  //       FROM users u
+  //       WHERE u.id IN (
+  //         SELECT f.user_b
+  //         FROM friends f
+  //         WHERE f.user_a = ${userId}
+  //         UNION
+  //         SELECT f.user_a
+  //         FROM friends f
+  //         WHERE f.user_b = ${userId}
+  //       )
+  //       ORDER BY u.created_at DESC
+  //       LIMIT 9;
+  //     `;
+
+  //     const [rows] = await connectionDataBase
+  //       .promise()
+  //       .query(query, [userId, userId]);
+  //     return rows;
+  //   } catch (error) {
+  //     console.error("Erro na consulta", error);
+  //     throw error;
+  //   }
+  // }
+
   async listLatestFriends(userId: number) {
     try {
-      const query = /*SQL*/ `
+      const query = `
         SELECT u.*
         FROM users u
         WHERE u.id IN (
           SELECT f.user_b
           FROM friends f
-          WHERE f.user_a = ?
+          WHERE f.user_a = ${userId}
           UNION
           SELECT f.user_a
           FROM friends f
-          WHERE f.user_b = ?
+          WHERE f.user_b = ${userId}
         )
         ORDER BY u.created_at DESC
         LIMIT 9;
       `;
 
-      const [rows] = await connectionDataBase
-        .promise()
-        .query(query, [userId, userId]);
+      const rows = await prisma.$executeRaw`${query}`;
       return rows;
     } catch (error) {
       console.error("Erro na consulta", error);
