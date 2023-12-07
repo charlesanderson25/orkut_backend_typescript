@@ -1,4 +1,5 @@
 import { connectionDataBase } from "../db";
+import { prisma } from "../prisma";
 
 // export class UserRepository {
 //   async createUser(data: any) {
@@ -44,76 +45,86 @@ interface LastInsertResult {
 
 export class UserRepository {
   async createUser(data: any) {
-    try {
-      const query = `
-        INSERT INTO users (first_name, last_name, avatar, pass_word)
-        VALUES (?, ?, ?, ?);
-      `;
+    // try {
+    //   const query = `
+    //     INSERT INTO users (first_name, last_name, avatar, pass_word)
+    //     VALUES (?, ?, ?, ?);
+    //   `;
 
-      const values = [
-        data.first_name,
-        data.last_name,
-        data.avatar,
-        data.pass_word,
-      ];
+    //   const values = [
+    //     data.first_name,
+    //     data.last_name,
+    //     data.avatar,
+    //     data.pass_word,
+    //   ];
 
-      await connectionDataBase.promise().query(query, values);
+    //   await connectionDataBase.promise().query(query, values);
 
-      const [lastInsertResult] = (await connectionDataBase
-        .promise()
-        .query("SELECT LAST_INSERT_ID() as lastInsertId")) as [
-        LastInsertResult[],
-        unknown[]
-      ];
+    //   const [lastInsertResult] = (await connectionDataBase
+    //     .promise()
+    //     .query("SELECT LAST_INSERT_ID() as lastInsertId")) as [
+    //     LastInsertResult[],
+    //     unknown[]
+    //   ];
 
-      const lastInsertId = lastInsertResult[0].lastInsertId;
+    //   const lastInsertId = lastInsertResult[0].lastInsertId;
 
-      const [result] = await connectionDataBase
-        .promise()
-        .query("SELECT * FROM users WHERE id = ?", [lastInsertId]);
+    //   const [result] = await connectionDataBase
+    //     .promise()
+    //     .query("SELECT * FROM users WHERE id = ?", [lastInsertId]);
 
-      if (Array.isArray(result) && result.length === 1) {
-        return result[0];
-      } else {
-        return "Nenhum registro inserido, por favor, verifique!";
-      }
-    } catch (error) {
-      console.error("Erro na consulta", error);
-      throw error;
-    }
+    //   if (Array.isArray(result) && result.length === 1) {
+    //     return result[0];
+    //   } else {
+    //     return "Nenhum registro inserido, por favor, verifique!";
+    //   }
+    // } catch (error) {
+    //   console.error("Erro na consulta", error);
+    //   throw error;
+    // }
+    const user = await prisma.users.create({ data });
+    return user;
   }
 
   async readUser(id: number) {
-    try {
-      const [rows] = await connectionDataBase.promise().query(
-        /*SQL*/
-        `SELECT * FROM users WHERE id = ?`,
-        [id]
-      );
+    // try {
+    //   const [rows] = await connectionDataBase.promise().query(
+    //     /*SQL*/
+    //     `SELECT * FROM users WHERE id = ?`,
+    //     [id]
+    //   );
 
-      if (Array.isArray(rows) && rows.length === 0) {
-        return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
-      }
+    //   if (Array.isArray(rows) && rows.length === 0) {
+    //     return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
+    //   }
 
-      const user = rows[0];
-      return user;
-    } catch (error) {
-      console.error("Erro na consulta:", error);
-      throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
-    }
+    //   const user = rows[0];
+    //   return user;
+    // } catch (error) {
+    //   console.error("Erro na consulta:", error);
+    //   throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
+    // }
+    const user = await prisma.users.findFirst({
+      where: {
+        id,
+      },
+    });
+    return user;
   }
 
   async listAllUsers() {
-    try {
-      const queryCode = /*SQL*/ `SELECT * FROM users`;
-      const [rows] = await connectionDataBase.promise().query(queryCode);
+    // try {
+    //   const queryCode = /*SQL*/ `SELECT * FROM users`;
+    //   const [rows] = await connectionDataBase.promise().query(queryCode);
 
-      console.log(rows);
-      return rows;
-    } catch (error) {
-      console.error("Erro na consulta", error);
-      throw error;
-    }
+    //   console.log(rows);
+    //   return rows;
+    // } catch (error) {
+    //   console.error("Erro na consulta", error);
+    //   throw error;
+    // }
+    const user = await prisma.users.findMany();
+    return user;
   }
 
   // async addFriend(userA: number, userB: number) {
@@ -142,33 +153,40 @@ export class UserRepository {
   //   }
   // }
 
-  async addFriend(userA: number, userB: number) {
-    try {
-      const query = /*SQL*/ `
-        INSERT INTO friends (user_a, user_b)
-        VALUES (?, ?);
-      `;
+  async addFriend(user_a: number, user_b: number) {
+    // try {
+    //   const query = /*SQL*/ `
+    //     INSERT INTO friends (user_a, user_b)
+    //     VALUES (?, ?);
+    //   `;
 
-      const values = [userA, userB];
+    //   const values = [userA, userB];
 
-      await connectionDataBase.promise().query(query, values);
+    //   await connectionDataBase.promise().query(query, values);
 
-      const [lastInsertResult] = (await connectionDataBase
-        .promise()
-        .query("SELECT * FROM friends WHERE id = LAST_INSERT_ID()")) as [
-        { id: number }[],
-        unknown[]
-      ];
+    //   const [lastInsertResult] = (await connectionDataBase
+    //     .promise()
+    //     .query("SELECT * FROM friends WHERE id = LAST_INSERT_ID()")) as [
+    //     { id: number }[],
+    //     unknown[]
+    //   ];
 
-      if (Array.isArray(lastInsertResult) && lastInsertResult.length === 1) {
-        return lastInsertResult[0];
-      } else {
-        return "Erro ao incluir os dados, por favor, verifique a query!";
-      }
-    } catch (error) {
-      console.error("Erro na consulta", error);
-      throw error;
-    }
+    //   if (Array.isArray(lastInsertResult) && lastInsertResult.length === 1) {
+    //     return lastInsertResult[0];
+    //   } else {
+    //     return "Erro ao incluir os dados, por favor, verifique a query!";
+    //   }
+    // } catch (error) {
+    //   console.error("Erro na consulta", error);
+    //   throw error;
+    // }
+    const friend = await prisma.users.create({
+      data: {
+        user_a,
+        user_b,
+      },
+    });
+    return friend;
   }
 
   async listLatestFriends(userId: number) {
