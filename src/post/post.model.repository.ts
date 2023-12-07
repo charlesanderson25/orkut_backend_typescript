@@ -1,6 +1,6 @@
 import fs from "fs";
 import * as jsonService from "../json/json.service";
-import cors from "cors";
+// import cors from "cors";
 import express from "express";
 import { connectionDataBase } from "../db";
 import { error } from "console";
@@ -33,13 +33,22 @@ const postsConnection = connectionDataBase.query(
 // Fim do teste conexão banco de dados **********************************************
 
 const app = express();
-app.use(cors());
+// app.use(cors());
 
 const postsPath = "data/posts";
 const postLatestIdPath = "data/postLatestId.json";
 
 export class PostRepository {
-  async listPosts(orderBy, search) {
+  async listPosts({ orderBy, search }: any) {
+    // const posts = await prisma.posts.findMany({
+    //   select: {
+    //     id: true,
+    //     CONTENT: true,
+    //     created_at: true,
+    //     user_id: true,
+    //   },
+    // });
+
     const whereSearch = search ? /*SQL*/ `WHERE content LIKE '%${search}'` : "";
     try {
       const validOrderBy = orderBy === "asc" ? "ASC" : "DESC";
@@ -93,12 +102,15 @@ export class PostRepository {
     //   throw error;
     // }
     const nextPost = await prisma.posts.create({
-      data,
+      data: {
+        user_id: data.user_id,
+        CONTENT: data.content,
+      },
     });
     return nextPost;
   }
 
-  async readPost(id: number) {
+  async readPost(postId: number) {
     // try {
     //   const [rows] = await connectionDataBase.promise().query(
     //     /*SQL*/
@@ -118,13 +130,13 @@ export class PostRepository {
     // }
     const post = await prisma.posts.findFirst({
       where: {
-        id,
+        id: postId,
       },
     });
     return post;
   }
 
-  async updatePost(id: number, data: any) {
+  async updatePost(postId: number, data: any) {
     // try {
     //   const query = "UPDATE posts SET content = ? WHERE id = ?;";
     //   const values = [data.content, id];
@@ -141,15 +153,17 @@ export class PostRepository {
     //   throw error;
     // }
     const post = await prisma.posts.update({
-      where: {
-        id,
+      data: {
+        CONTENT: data.content,
       },
-      data,
+      where: {
+        id: postId,
+      },
     });
     return post;
   }
 
-  async deletePost(id: number) {
+  async deletePost(postId: number) {
     // try {
     //   const query = "DELETE FROM posts WHERE id = ?";
     //   const values = [id];
@@ -166,13 +180,22 @@ export class PostRepository {
     // }
     const post = await prisma.posts.delete({
       where: {
-        id,
+        id: postId,
       },
     });
     return post;
   }
 
   async listPostComments(id: number) {
+    // const comments = await prisma.comments.findMany({
+    //   select: {
+    //     id: true,
+    //     message: true,
+    //     created_at: true,
+    //     user_id: true,
+    //   },
+    // });
+
     try {
       const query =
         /*SQL*/
@@ -225,6 +248,10 @@ export class PostRepository {
   // }
 
   async createPostComment(postId: number, message: string, userId: number) {
+    // const comment = await prisma.comments.create({
+    //   postId,
+    // });
+
     try {
       const query = `
         INSERT INTO comments (message, post_id, user_id) 
