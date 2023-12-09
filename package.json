@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
-    "seed:post": "node src/post/post.seed.mjs",
-    "seed:user": "node src/user/user.seed.mjs",
-    "user:service": "node src/user/user.model.service.mjs",
-    "seed:friend": "node src/friend/friend.seed.mjs"
+    "seed:post": "node src/post/post.seed.ts",
+    "seed:user": "node src/user/user.seed.ts",
+    "user:service": "node src/user/user.model.repository.ts",
+    "seed:friend": "node src/friend/friend.seed.ts"
   },
   "repository": {
     "type": "git",
