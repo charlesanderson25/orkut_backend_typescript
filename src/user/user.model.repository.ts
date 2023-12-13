@@ -1,6 +1,7 @@
 // import { prisma } from "./../prisma";
 import { connectionDataBase } from "../db";
 import { PrismaClient } from "@prisma/client";
+import type { CreateUserDto } from "./dtos/create.user.dto";
 
 const prisma = new PrismaClient();
 
@@ -47,7 +48,7 @@ interface LastInsertResult {
 }
 
 export class UserRepository {
-  async createUser(data: any) {
+  async createUser(data: CreateUserDto) {
     // try {
     //   const query = `
     //     INSERT INTO users (first_name, last_name, avatar, pass_word)
