@@ -27,6 +27,7 @@ function generateUser() {
     last_name: faker.person.lastName(),
     avatar: faker.internet.avatar(),
     pass_word: faker.internet.password(),
+    email: faker.internet.email(),
   };
 }
 
