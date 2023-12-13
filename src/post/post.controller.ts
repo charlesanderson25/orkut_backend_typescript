@@ -21,6 +21,9 @@ import {
 } from "./post.model.repository";
 import cors from "cors";
 import { PostRepository } from "./post.model.repository";
+import { CreatePostDto } from "./dtos/create.post.dto";
+import { UpdatePostDto } from "./dtos/update.post.dto";
+import { CreatePostCommentDto } from "./dtos/create.post.comment.dto";
 
 const app = express();
 app.use(cors());
@@ -52,7 +55,7 @@ export class PostController {
 
   @HttpCode(201)
   @Post()
-  async createPost(@Body() body: any) {
+  async createPost(@Body() body: CreatePostDto) {
     // const postData = req.body;
     const post = await this.postRepository.createPost(body);
     return post;
@@ -65,7 +68,7 @@ export class PostController {
   }
 
   @Put("/:id")
-  async updateById(@Param("id") postId: number, @Body() body: any) {
+  async updateById(@Param("id") postId: number, @Body() body: UpdatePostDto) {
     const post = await this.postRepository.updatePost(postId, body);
     return post;
   }
@@ -78,7 +81,10 @@ export class PostController {
 
   @HttpCode(201)
   @Post("/:id/comments")
-  async createPostComment(@Param("id") postId: number, @Body() body: any) {
+  async createPostComment(
+    @Param("id") postId: number,
+    @Body() body: CreatePostCommentDto
+  ) {
     const { userId, message } = body; // Desestruturação para obter userId e message do req.body
     const comment = await this.postRepository.createPostComment(
       postId,
