@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { listLatestFriends, readUser } from "./user.model.repository";
-import { JsonController, Get, Param } from "routing-controllers";
+import { JsonController, Get, Param, Post, Body } from "routing-controllers";
 import { UserRepository } from "./user.model.repository";
+import { CreateUserDto } from "./dtos/create.user.dto";
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,12 @@ export class UserController {
   }
 
   userRepository: UserRepository;
+
+  @Post()
+  async createUser(@Body() body: CreateUserDto) {
+    const user = await this.userRepository.createUser(body);
+    return user;
+  }
 
   @Get("/:userId")
   async getById(@Param("userId") userId: number) {
