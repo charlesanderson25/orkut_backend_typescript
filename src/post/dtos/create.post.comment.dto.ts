@@ -7,7 +7,7 @@ export class CreatePostCommentDto {
   @MaxLength(96, {
     message: "O conteúdo pode ter no máximo 96 caracteres",
   })
-  content: string;
+  message: string;
 
   @IsInt()
   @IsOptional()
