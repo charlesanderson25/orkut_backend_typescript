@@ -6,6 +6,9 @@ import { connectionDataBase } from "../db";
 import { error } from "console";
 import { isAsyncFunction } from "util/types";
 import { prisma } from "../prisma";
+import type { CreatePostDto } from "./dtos/create.post.dto";
+import type { UpdatePostDto } from "./dtos/update.post.dto";
+import type { CreatePostCommentDto } from "./dtos/create.post.comment.dto";
 
 //Teste conexão banco de dados **********************************************
 
@@ -39,7 +42,13 @@ const postsPath = "data/posts";
 const postLatestIdPath = "data/postLatestId.json";
 
 export class PostRepository {
-  async listPosts({ orderBy, search }: any) {
+  async listPosts({
+    orderBy,
+    search,
+  }: {
+    orderBy: "asc" | "desc";
+    search?: string;
+  }) {
     // const posts = await prisma.posts.findMany({
     //   select: {
     //     id: true,
@@ -75,7 +84,7 @@ export class PostRepository {
     }
   }
 
-  async createPost(data: any) {
+  async createPost(data: CreatePostDto) {
     // try {
     //   const query = "INSERT INTO posts (content, user_id) VALUES (?, ?)";
     //   const values = [data.content, data.user_id]; // Certifique-se de que data.user_id seja passado
@@ -136,7 +145,7 @@ export class PostRepository {
     return post;
   }
 
-  async updatePost(postId: number, data: any) {
+  async updatePost(postId: number, data: UpdatePostDto) {
     // try {
     //   const query = "UPDATE posts SET content = ? WHERE id = ?;";
     //   const values = [data.content, id];
