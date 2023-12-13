@@ -92,6 +92,7 @@ export class UserRepository {
         last_name: data.last_name,
         pass_word: data.pass_word,
         avatar: data.avatar,
+        email: data.email,
       },
     });
     return user;
@@ -118,6 +119,15 @@ export class UserRepository {
     const user = await prisma.users.findUnique({
       where: {
         id: userId,
+      },
+    });
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await prisma.users.findUnique({
+      where: {
+        email,
       },
     });
     return user;
