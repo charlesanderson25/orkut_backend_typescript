@@ -1,5 +1,6 @@
 import { Jwt } from "jsonwebtoken";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Request } from "express";
 
 export class JwtService {
   constructor() {
@@ -19,8 +20,23 @@ export class JwtService {
 
   decode(token: string) {
     const payload = jwt.verify(token, this.jwtSecret);
+    return payload as JwtPayload;
+  }
+
+  extractTokenFromHeader(request: Request) {
+    const authorizationHeader = request.headers.authorization;
+    if (authorizationHeader === undefined) {
+      throw new InvalidAuthorizationHeaderError();
+    }
+
+    const [bearer, token] = authorizationHeader.split("");
+    if (bearer !== "Bearer" || token.length < 1) {
+      throw new InvalidAuthorizationHeaderError();
+    }
+    const payload = this.decode(token);
     return payload;
   }
 }
 
-class EmptyJwtError extends Error {}
+export class EmptyJwtError extends Error {}
+export class InvalidAuthorizationHeaderError extends Error {}
