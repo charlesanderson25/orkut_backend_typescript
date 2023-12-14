@@ -7,6 +7,8 @@ import { connectionDataBase } from "./db";
 import userController, { UserController } from "./user/user.contoller";
 import { createExpressServer } from "routing-controllers";
 import { AuthController } from "./auth/auth.controller";
+import { authorizationChecker } from "./auth/checkers/authorizationChecker";
+import { currentUserChecker } from "./auth/checkers/currentUserChecker";
 
 const port = 8080;
 const host = "0.0.0.0";
@@ -15,6 +17,8 @@ const host = "0.0.0.0";
 const app = createExpressServer({
   cors: true,
   controllers: [PostController, UserController, AuthController],
+  authorizationChecker,
+  currentUserChecker,
 });
 
 app.use(
