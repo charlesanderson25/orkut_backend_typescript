@@ -40,7 +40,15 @@ async function postSeed() {
   console.log("Seed realizado com sucesso!");
 }
 
-async function commentSeed(post, usersIds) {
+async function commentSeed(
+  post: {
+    id: number;
+    CONTENT: string;
+    created_at: Date;
+    user_id: number | null;
+  },
+  usersIds: number
+) {
   const userRepository = new UserRepository();
   const postRepository = new PostRepository();
   const commentCount =
@@ -53,11 +61,20 @@ async function commentSeed(post, usersIds) {
       comment.message,
       comment.user_id
     );
-    console.log(`Post criado com id: ${addedComment.id}`);
+    // console.log(`Post criado com id: ${addedComment.id}`);
+    if (isCommentWithId(addedComment)) {
+      console.log(`Post criado com id: ${addedComment.id}`);
+    } else {
+      console.log(`Erro ao incluir os dados, por favor, verifique a query!`);
+    }
+    function isCommentWithId(comment: any): comment is { id: number } {
+      return typeof comment === "object" && comment !== null && "id" in comment;
+    }
   }
 }
+// }
 
-function generatePost(user_id) {
+function generatePost(user_id: number) {
   return {
     user_id,
     // title: faker.lorem.word(4 + Math.round(Math.random() * 5)),
@@ -74,7 +91,7 @@ function generatePost(user_id) {
 //   };
 // }
 
-function generateComment(user_id) {
+function generateComment(user_id: number) {
   const comment = {
     user_id,
     message: faker.lorem.words(2 + Math.round(Math.random() * 5)),
@@ -85,7 +102,7 @@ function generateComment(user_id) {
   return comment;
 }
 
-function getRandomUserId(usersId) {
+function getRandomUserId(usersId: number) {
   return usersId[Math.floor(Math.random() * usersId.length)];
 }
 
