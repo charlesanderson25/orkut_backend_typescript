@@ -10,15 +10,15 @@ import {
   HttpCode,
 } from "routing-controllers";
 import express from "express";
-import {
-  createPost,
-  createPostComment,
-  deletePost,
-  listPostComments,
-  listPosts,
-  readPost,
-  updatePost,
-} from "./post.model.repository";
+// import {
+//   createPost,
+//   createPostComment,
+//   deletePost,
+//   listPostComments,
+//   listPosts,
+//   readPost,
+//   updatePost,
+// } from "./post.model.repository";
 import cors from "cors";
 import { PostRepository } from "./post.model.repository";
 import { CreatePostDto } from "./dtos/create.post.dto";
@@ -39,11 +39,11 @@ export class PostController {
 
   @Get()
   async getAll(
-    @QueryParam("order_by") orderBy: string = "desc",
+    @QueryParam("order_by") orderBy: "asc" | "desc" = "desc",
     // @QueryParam("search") search: string | null = null
-    @QueryParam("search") search: string
+    @QueryParam("search") search?: string
   ) {
-    const posts = await this.postRepository.listPosts(orderBy, search);
+    const posts = await this.postRepository.listPosts({ orderBy, search });
     // res.status(200).json(posts);
     return posts;
   }
@@ -85,11 +85,11 @@ export class PostController {
     @Param("id") postId: number,
     @Body() body: CreatePostCommentDto
   ) {
-    const { userId, message } = body; // Desestruturação para obter userId e message do req.body
+    const { user_id, message } = body; // Desestruturação para obter userId e message do req.body
     const comment = await this.postRepository.createPostComment(
       postId,
       message,
-      userId
+      user_id
     );
     return comment;
   }
