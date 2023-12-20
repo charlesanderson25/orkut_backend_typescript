@@ -7,14 +7,17 @@ import {
   Param,
   Authorized,
   CurrentUser,
+  Body,
 } from "routing-controllers";
 import type { User } from "../user/user.types";
+import { CreateScrapDto } from "./dtos/create-scrap.dto";
+import { UpdatePostDto } from "../post/dtos/update.post.dto";
 
 @JsonController("/scraps")
 export class ScrapController {
   @Authorized()
-  @Get("/users/:userId")
-  async listUserScraps(@Param("userId") userId: number) {}
+  @Get("/owner/:userId")
+  async listOwnerScraps(@Param("ownerId") ownerId: number) {}
 
   @Authorized()
   @Get("/scrapId")
@@ -22,5 +25,23 @@ export class ScrapController {
 
   @Authorized()
   @Post()
-  async creatScrap(@CurrentUser() user: User) {}
+  async createScrap(
+    @Body() createScrapDto: CreateScrapDto,
+    @CurrentUser() user: User
+  ) {}
+
+  @Put("/scrapId")
+  @Authorized()
+  async updateScrap(
+    @Param("scrapId") scrapId: string,
+    @Body() updateScrapDto: UpdatePostDto,
+    @CurrentUser() user: User
+  ) {}
+
+  @Delete("/:scrapId")
+  @Authorized()
+  async deleteScrap(
+    @Param("scrapId") scrapId: string,
+    @CurrentUser() user: User
+  ) {}
 }
