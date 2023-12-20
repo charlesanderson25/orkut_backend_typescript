@@ -1,6 +1,7 @@
-import { IsInt, MinLength, MaxLength, Min } from "class-validator";
+import { IsInt, MinLength, MaxLength, IsOptional } from "class-validator";
 
 export class CreateScrapDto {
+  @IsOptional()
   @IsInt()
   creatorId: number;
 
