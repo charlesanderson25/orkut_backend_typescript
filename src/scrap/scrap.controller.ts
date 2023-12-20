@@ -23,7 +23,7 @@ export class ScrapController {
   scrapService: ScrapService;
 
   @Authorized()
-  @Get("/owner/:userId")
+  @Get("/owner/:ownerId")
   async listOwnerScraps(
     @Param("ownerId") ownerId: number,
     @CurrentUser() user: User
