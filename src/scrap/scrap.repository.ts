@@ -14,6 +14,7 @@ export class ScrapRepository {
     const scrap = await this.scraps.findOne({
       _id: new ObjectId(id),
     });
+    this.prepareJsonEncode(scrap);
     return scrap;
   }
 
@@ -25,7 +26,11 @@ export class ScrapRepository {
   }
 
   async createScrap(createScrapDto: CreateScrapDto) {
-    const scrap = await this.scraps.insertOne(createScrapDto);
+    const results = await this.scraps.insertOne(createScrapDto);
+    const scrap = await this.scraps.findOne({
+      _id: results.insertedId,
+    });
+    this.prepareJsonEncode(scrap);
     return scrap;
   }
 
@@ -36,12 +41,18 @@ export class ScrapRepository {
       },
       updateScrapDto
     );
+    this.prepareJsonEncode(scrap);
+    return scrap;
   }
 
   async deleteScrap(id: string) {
     const scrap = await this.scraps.findOneAndDelete({
       _id: new ObjectId(id),
     });
+    this.prepareJsonEncode(scrap);
     return scrap;
+  }
+  private prepareJsonEncode(scrap: any) {
+    scrap._id = scrap._id.toString();
   }
 }
