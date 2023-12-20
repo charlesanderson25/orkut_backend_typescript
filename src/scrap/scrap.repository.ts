@@ -22,7 +22,11 @@ export class ScrapRepository {
     const scraps = await this.scraps.find({
       ownerId,
     });
-    return scraps;
+    const scrapsArray = await scraps.toArray();
+    for (let index = 0; index < scrapsArray.length; index++) {
+      this.prepareJsonEncode(scrapsArray[index]);
+    }
+    return scrapsArray;
   }
 
   async createScrap(createScrapDto: CreateScrapDto) {
@@ -39,7 +43,12 @@ export class ScrapRepository {
       {
         _id: new ObjectId(id),
       },
-      updateScrapDto
+      {
+        $set: updateScrapDto,
+      },
+      {
+        returnDocument: "after",
+      }
     );
     this.prepareJsonEncode(scrap);
     return scrap;
