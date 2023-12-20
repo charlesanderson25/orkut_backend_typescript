@@ -10,6 +10,9 @@ import { AuthController } from "./auth/auth.controller";
 import { authorizationChecker } from "./auth/checkers/authorizationChecker";
 import { currentUserChecker } from "./auth/checkers/currentUserChecker";
 import { ScrapController } from "./scrap/scrap.controller";
+import { setupMongoDb } from "./mongodb";
+
+setupMongoDb();
 
 const port = 8080;
 const host = "0.0.0.0";
